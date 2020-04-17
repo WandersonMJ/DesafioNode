@@ -35,6 +35,9 @@ function validateProjectId(request, response, next) {
 app.use(logRequests);
 app.use('/repositories/:id', validateProjectId);
 
+ //--------------->
+
+
 app.get("/repositories", (request, response) => {
   const { title } = request.query;
 
@@ -42,8 +45,11 @@ app.get("/repositories", (request, response) => {
     ? repositories.filter(repository => repository.title.includes(title))  
     : repositories;
 
-  return response.json({ message: "sucess", results})
+  return response.send(results)
 });
+
+//--------------->
+
 
 app.post("/repositories", (request, response) => {
   const { title, url, techs } = request.body;
@@ -54,8 +60,12 @@ app.post("/repositories", (request, response) => {
       techs,
       likes: 0 };
     repositories.push(repository);
-  return response.json({ message: 'sucess', repository})
+  return response.send(repository)
 });
+
+
+//--------------->
+
 
 app.put("/repositories/:id", (request, response) => {
   const { id } = request.params;
@@ -71,8 +81,10 @@ app.put("/repositories/:id", (request, response) => {
 
   repositories[repositoryIndex] = {id, title, url, techs, likes};
  
-  return response.json({message: "sucess", repository: repositories[repositoryIndex]});
+  return response.send(repositories[repositoryIndex]);
 });
+
+//------------------>
 
 app.delete("/repositories/:id", (req, res) => {
   const { id } = req.params;
@@ -101,7 +113,7 @@ app.post("/repositories/:id/like", (request, response) => {
 
   repositories[repositoryIndex] = {id, title, url, techs, likes: likes+1};
 
-  return response.json({message: "sucess", repository: repositories[repositoryIndex]});
+  return response.send(repositories[repositoryIndex]);
 });
 
 module.exports = app;
